@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Daniel Valencia (daniel@tacitknowledge.com)
@@ -42,12 +43,23 @@ public class DefaultImageService implements ImageService {
     public ImageData fetchRandomImage(String tag) {
         String randomImagePath = buildRandomImagePath(tag);
         String response = executeRequest(randomImagePath);
+        System.out.println("Hello world");
         return unmarshalResponse(response);
     }
 
     private ImageData unmarshalResponse(String response) {
         final ImageData imageData = new ImageData();
-        imageData.url = "http://i.giphy.com/l4KhNPQssDrjr36a4.gif";
+        Map<String, Object> imageMap = gson.fromJson(response, Map.class);
+
+        if(imageMap != null) {
+            final Object data = imageMap.get("data");
+            if (data != null && data instanceof Map) {
+                Map<String, String> dataMap = (Map<String, String>) data;
+                imageData.url = dataMap.get("image_url");
+                imageData.alt = dataMap.get("caption");
+            }
+        }
+
         return imageData;
     }
 
