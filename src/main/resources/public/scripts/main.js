@@ -1,7 +1,5 @@
 'use strict';
 
-let msg = 'hello world!';
-
 const fetchRandomImage = (tag) => {
     $("#loader").show();
     $.ajax({
