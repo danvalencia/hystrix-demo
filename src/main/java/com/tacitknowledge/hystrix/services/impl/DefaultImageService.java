@@ -1,17 +1,15 @@
 package com.tacitknowledge.hystrix.services.impl;
 
-import com.google.gson.Gson;
 import com.tacitknowledge.hystrix.models.ImageData;
+import com.tacitknowledge.hystrix.parsers.ImageDataParser;
 import com.tacitknowledge.hystrix.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Daniel Valencia (daniel@tacitknowledge.com)
@@ -25,6 +23,9 @@ public class DefaultImageService implements ImageService {
     @Value("/v1/gifs/random")
     private String randomPath;
 
+    @Value("/v1/gifs/search")
+    private String searchPath;
+
     @Value("dc6zaTOxFJmzC")
     private String apiKey;
 
@@ -32,35 +33,20 @@ public class DefaultImageService implements ImageService {
     private RestTemplate restTemplate;
 
     @Autowired
-    private Gson gson;
+    private ImageDataParser imageDataParser;
 
     @Override
-    public List<ImageData> fetchAllImages() {
-        throw new NotImplementedException();
+    public List<ImageData> searchImages(String searchTerm) {
+        String searchPath = buildSearchPath(searchTerm);
+        String response = executeRequest(searchPath);
+        return imageDataParser.fromStringToList(response);
     }
 
     @Override
     public ImageData fetchRandomImage(String tag) {
         String randomImagePath = buildRandomImagePath(tag);
         String response = executeRequest(randomImagePath);
-        System.out.println("Hello world");
-        return unmarshalResponse(response);
-    }
-
-    private ImageData unmarshalResponse(String response) {
-        final ImageData imageData = new ImageData();
-        Map<String, Object> imageMap = gson.fromJson(response, Map.class);
-
-        if(imageMap != null) {
-            final Object data = imageMap.get("data");
-            if (data != null && data instanceof Map) {
-                Map<String, String> dataMap = (Map<String, String>) data;
-                imageData.url = dataMap.get("image_url");
-                imageData.alt = dataMap.get("caption");
-            }
-        }
-
-        return imageData;
+        return imageDataParser.fromString(response);
     }
 
     private String executeRequest(String path) {
@@ -77,5 +63,9 @@ public class DefaultImageService implements ImageService {
 
     private String buildRandomImagePath(String tag) {
         return String.format("%s%s?api_key=%s&tag=%s", baseUrl, randomPath, apiKey, tag);
+    }
+
+    private String buildSearchPath(String searchTerm) {
+        return String.format("%s%s?api_key=%s&q=%s", baseUrl, searchPath, apiKey, searchTerm);
     }
 }

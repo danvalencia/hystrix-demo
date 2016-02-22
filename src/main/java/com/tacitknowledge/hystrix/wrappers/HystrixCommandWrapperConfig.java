@@ -1,17 +1,15 @@
-package com.tacitknowledge.hystrix.config;
+package com.tacitknowledge.hystrix.wrappers;
 
-import com.tacitknowledge.hystrix.commands.HystrixCommandWrapper;
+import com.tacitknowledge.hystrix.wrappers.HystrixCommandWrapper;
 import com.tacitknowledge.hystrix.models.ImageData;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 /**
  * @author Daniel Valencia (daniel@tacitknowledge.com)
  */
-@Configuration
-public class CommandConfig {
+public class HystrixCommandWrapperConfig {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -23,8 +21,8 @@ public class CommandConfig {
         hystrixCommandWrapper.setExecutionTimeout(3000);
 
         final ImageData imageData = new ImageData();
-        imageData.url = "http://i.giphy.com/xT0BKhunZXlEsnpz7q.gif";
-        imageData.alt = "You Are Awesome";
+        imageData.setUrl("http://i.giphy.com/xT0BKhunZXlEsnpz7q.gif");
+        imageData.setAlt("You Are Awesome");
         hystrixCommandWrapper.setFallbackResponse(imageData);
 
         return hystrixCommandWrapper;

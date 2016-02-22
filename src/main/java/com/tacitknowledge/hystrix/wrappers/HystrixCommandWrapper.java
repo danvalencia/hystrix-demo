@@ -1,4 +1,4 @@
-package com.tacitknowledge.hystrix.commands;
+package com.tacitknowledge.hystrix.wrappers;
 
 import com.netflix.hystrix.*;
 
@@ -17,13 +17,6 @@ public class HystrixCommandWrapper<T> {
         return response.execute();
     }
 
-//    public Future<T> runAsync(HystrixAction<T> hystrixAction) {
-//        final HystrixCommand<T> hystrixCommand = buildHystrixCommand(hystrixAction);
-//        Future<T> future = hystrixCommand.queue();
-//
-//        return future;
-//    }
-//
     private HystrixCommand<T> buildHystrixCommand(final HystrixAction<T> hystrixAction) {
         return new HystrixCommand<T>(buildCommandConfiguration()) {
             @Override
