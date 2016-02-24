@@ -17,16 +17,16 @@ import java.util.List;
 @Service
 public class DefaultImageService implements ImageService {
 
-    @Value("http://api.giphy.com/")
+    @Value("${image.service.base.url}")
     private String baseUrl;
 
-    @Value("/v1/gifs/random")
+    @Value("${image.service.random.path}")
     private String randomPath;
 
-    @Value("/v1/gifs/search")
+    @Value("${image.service.search.path}")
     private String searchPath;
 
-    @Value("dc6zaTOxFJmzC")
+    @Value("${image.service.api.key}")
     private String apiKey;
 
     @Autowired
@@ -46,7 +46,8 @@ public class DefaultImageService implements ImageService {
     public ImageData fetchRandomImage(String tag) {
         String randomImagePath = buildRandomImagePath(tag);
         String response = executeRequest(randomImagePath);
-        return imageDataParser.fromString(response);
+        final ImageData imageData = imageDataParser.fromString(response);
+        return imageData;
     }
 
     private String executeRequest(String path) {

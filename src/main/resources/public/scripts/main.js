@@ -9,7 +9,7 @@ const fetchRandomImage = (tag) => {
     }).done((html) => {
         $("#loader").hide();
         console.log("Received data: " + html);
-        $("#content").append(html)
+        $("#content").prepend(html)
     });
 };
 
@@ -22,7 +22,7 @@ const searchImages = (searchTerm) => {
     }).done((html) => {
         $("#loader").hide();
         console.log("Received data: " + html);
-        $("#content").append(html)
+        $("#content").prepend(html)
     });
 };
 
@@ -42,4 +42,4 @@ $("#searchImagesForm").submit((e) => {
         searchImages(searchTerm);
     }
     return false;
-})
+});

@@ -27,9 +27,13 @@ public class SearchImagesCommand extends HystrixCommand<List<ImageData>> {
         super(HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("SearchImagesCommand"))
                                             .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("SearchImagesThreadPool"))
                                             .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                                                    .withExecutionTimeoutInMilliseconds(5000))
+                                                    .withExecutionTimeoutInMilliseconds(3000)
+                                                    .withCircuitBreakerEnabled(true)
+                                                    .withCircuitBreakerErrorThresholdPercentage(50))
                                             .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
-                                                    .withMaxQueueSize(10)));
+                                                    .withCoreSize(10)
+                                                    .withMaxQueueSize(5)
+                                                    .withQueueSizeRejectionThreshold(10)));
     }
 
     public List<ImageData> execute(String searchTerm) {
@@ -45,7 +49,7 @@ public class SearchImagesCommand extends HystrixCommand<List<ImageData>> {
     @Override
     protected List<ImageData> getFallback() {
         final ImageData imageData = new ImageData();
-        imageData.setUrl("http://i.giphy.com/xT0BKhunZXlEsnpz7q.gif");
+        imageData.setUrl("http://media1.giphy.com/media/vCKC987OpQAco/100w.gif");
         imageData.setAlt("You Are Awesome");
 
         return Collections.singletonList(imageData);

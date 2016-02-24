@@ -3,8 +3,6 @@ package com.tacitknowledge.hystrix.controllers;
 import com.tacitknowledge.hystrix.commands.FetchRandomImageCommand;
 import com.tacitknowledge.hystrix.commands.SearchImagesCommand;
 import com.tacitknowledge.hystrix.models.ImageData;
-import com.tacitknowledge.hystrix.services.ImageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +17,6 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class ImagesController {
-
-    @Autowired
-    private ImageService imageService;
 
     @RequestMapping("/random")
     @ResponseBody

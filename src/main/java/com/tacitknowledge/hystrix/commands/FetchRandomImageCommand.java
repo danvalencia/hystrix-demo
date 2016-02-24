@@ -43,7 +43,7 @@ public class FetchRandomImageCommand extends HystrixCommand<ImageData> {
     @Override
     protected ImageData getFallback() {
         final ImageData imageData = new ImageData();
-        imageData.setUrl("http://i.giphy.com/xT0BKhunZXlEsnpz7q.gif");
+        imageData.setUrl("http://media1.giphy.com/media/vCKC987OpQAco/100w.gif");
         imageData.setAlt("You Are Awesome");
 
         return imageData;

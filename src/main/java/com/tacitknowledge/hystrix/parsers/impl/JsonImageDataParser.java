@@ -30,7 +30,7 @@ public class JsonImageDataParser implements ImageDataParser{
             if (data != null) {
                 if(data instanceof Map) {
                     Map<String, String> dataMap = (Map<String, String>) data;
-                    imageData.setUrl(dataMap.get("image_url"));
+                    imageData.setUrl(dataMap.get("fixed_width_small_url"));
                     imageData.setAlt(dataMap.get("caption"));
                 }
             }
